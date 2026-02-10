@@ -1,0 +1,8 @@
+{
+    "name": "mahfoudimad/activiha",
+    "description": "Activiha Store - Algeria COD Store",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    }
+}
