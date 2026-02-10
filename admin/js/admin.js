@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPages();
     loadSettings();
     loadStats();
+
+    // Add filter listeners
+    ['filter-from', 'filter-to', 'filter-status', 'filter-search'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            const event = id === 'filter-search' ? 'input' : 'change';
+            el.addEventListener(event, loadOrders);
+        }
+    });
 });
 
 function showTab(tab) {
@@ -39,29 +48,55 @@ async function loadOrders() {
         const res = await fetch('/api/orders', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        const orders = await res.json();
+        const allOrders = await res.json();
 
         // Cache for edit function
-        localStorage.setItem('orders_cache', JSON.stringify(orders));
+        localStorage.setItem('orders_cache', JSON.stringify(allOrders));
 
-        // Update stats
-        document.getElementById('stat-total-orders').innerText = orders.length;
+        // Apply Filters
+        let filteredOrders = [...allOrders];
+        const fromDate = document.getElementById('filter-from')?.value;
+        const toDate = document.getElementById('filter-to')?.value;
+        const status = document.getElementById('filter-status')?.value;
+        const search = document.getElementById('filter-search')?.value.toLowerCase();
 
-        const totalRev = orders.reduce((sum, o) => sum + o.totalPrice, 0);
+        if (fromDate) {
+            filteredOrders = filteredOrders.filter(o => new Date(o.createdAt) >= new Date(fromDate));
+        }
+        if (toDate) {
+            const upTo = new Date(toDate);
+            upTo.setHours(23, 59, 59, 999);
+            filteredOrders = filteredOrders.filter(o => new Date(o.createdAt) <= upTo);
+        }
+        if (status && status !== 'all') {
+            filteredOrders = filteredOrders.filter(o => o.status === status);
+        }
+        if (search) {
+            filteredOrders = filteredOrders.filter(o =>
+                o.customer.fullName.toLowerCase().includes(search) ||
+                o.customer.phone.includes(search) ||
+                o.id.toString().includes(search)
+            );
+        }
+
+        // Update stats based on filtered orders
+        document.getElementById('stat-total-orders').innerText = filteredOrders.length;
+
+        const totalRev = filteredOrders.reduce((sum, o) => sum + o.totalPrice, 0);
         document.getElementById('stat-total-revenue').innerText = totalRev.toLocaleString();
 
-        const confirmed = orders.filter(o => o.status === 'confirmed' || o.status === 'delivered').length;
+        const confirmed = filteredOrders.filter(o => o.status === 'confirmed' || o.status === 'delivered').length;
         document.getElementById('stat-confirmed-orders').innerText = confirmed;
 
-        const canceled = orders.filter(o => o.status === 'canceled').length;
+        const canceled = filteredOrders.filter(o => o.status === 'canceled').length;
         document.getElementById('stat-canceled-orders').innerText = canceled;
 
-        const successRate = orders.length > 0 ? ((confirmed / orders.length) * 100).toFixed(1) : 0;
+        const successRate = filteredOrders.length > 0 ? ((confirmed / filteredOrders.length) * 100).toFixed(1) : 0;
         document.getElementById('stat-success-rate').innerText = `${successRate}%`;
 
 
         const tbody = document.getElementById('orders-table-body');
-        tbody.innerHTML = orders.map(order => `
+        tbody.innerHTML = filteredOrders.map(order => `
             <tr>
                 <td style="font-size:0.75rem; font-family:monospace; color:#64748b;">#${order.id.toString().slice(-6)}</td>
                 <td style="font-weight:600;">${order.customer.fullName}</td>
