@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Activiha</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="../logo.png" alt="Activiha Logo" style="height: 30px;">
+            </h2>
+            <form id="login-form">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem;">Username</label>
+                    <input type="text" id="username"
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:0.5rem;" required>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem;">Password</label>
+                    <input type="password" id="password"
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:0.5rem;" required>
+                </div>
+                <button type="submit"
+                    style="width:100%; padding:0.75rem; background:#4f46e5; color:white; border:none; border-radius:0.5rem; font-weight:600; cursor:pointer;">Sign
+                    In</button>
+            </form>
+            <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280; text-align:center;">Default: admin /
+                admin123</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Add cache busting
+                const res = await fetch('/api/auth.php?v=' + Date.now(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('admin_token', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.message || data.error || 'Login failed');
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                alert('Connection error. Please check your internet or server configuration.');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+RewriteEngine On
+
+# Enable CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# API Routes - Rewrite /api/* to /api/*.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/products/([^/]+)$ api/products.php?id=$1 [L,QSA]
+RewriteRule ^api/products$ api/products.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/orders/([^/]+)$ api/orders.php?id=$1 [L,QSA]
+RewriteRule ^api/orders$ api/orders.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/pages/([^/]+)$ api/pages.php?id=$1 [L,QSA]
+RewriteRule ^api/pages$ api/pages.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/auth/login$ api/auth.php [L,QSA]
+RewriteRule ^api/auth$ api/auth.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/settings$ api/settings.php [L,QSA]
+
+# Default document
+DirectoryIndex index.html
+
+# Security - Prevent directory browsing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

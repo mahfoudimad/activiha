@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Activiha</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div style="margin-bottom: 2rem;">
+                <img src="../logo.png" alt="Activiha" style="width: 100%; filter: brightness(0) invert(1);">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active" id="nav-orders" onclick="showTab('orders')"><i
+                        class="fas fa-shopping-bag"></i> Orders</a>
+                <a href="#" id="nav-products" onclick="showTab('products')"><i class="fas fa-box"></i> Products</a>
+                <a href="#" id="nav-abandoned" onclick="showTab('abandoned')"><i class="fas fa-shopping-cart"
+                        style="color: #f87171;"></i> Abandoned</a>
+                <a href="#" id="nav-pages" onclick="showTab('pages')"><i class="fas fa-file-alt"></i> Pages</a>
+                <a href="#" id="nav-marketing" onclick="showTab('marketing')"><i class="fas fa-bullhorn"></i>
+                    Marketing</a>
+                <a href="#" id="nav-settings" onclick="showTab('settings')"><i class="fas fa-cog"></i> Settings</a>
+                <a href="/" target="_blank" style="margin-top: 2rem; color: #3b82f6;"><i
+                        class="fas fa-external-link-alt"></i> View Website</a>
+                <a href="#" onclick="logout()" style="margin-top: 4rem; color: #ef4444;"><i
+                        class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div id="orders-tab">
+                <div class="analytics-header">
+                    <div class="analytics-title">
+                        <h1>Analytics Studio</h1>
+                        <div class="live-badge">
+                            <div class="live-dot"></div>
+                            LIVE MONITORING SYSTEM • <span id="current-time">7:56:19 PM</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn-export" onclick="exportToCSV()">
+                            <i class="fas fa-file-export"></i> Export CSV
+                        </button>
+                        <button class="btn btn-primary" onclick="openOrderModal(false)">
+                            <i class="fas fa-plus"></i> New Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Filters -->
+                <div class="filters-card">
+                    <div class="filters-label">
+                        <i class="fas fa-filter" style="color: #4f46e5;"></i> DYNAMIC FILTERS
+                    </div>
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>From</label>
+                            <input type="date" class="filter-control" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="filter-group">
+                            <label>To</label>
+                            <input type="date" class="filter-control" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="filter-group">
+                            <label>Status</label>
+                            <select class="filter-control">
+                                <option value="all">All Leads</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="delivered">Delivered</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Quick Search</label>
+                            <div style="position: relative;">
+                                <i class="fas fa-search"
+                                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                                <input type="text" class="filter-control" style="padding-left: 2.5rem;"
+                                    placeholder="Name or phone...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box"><i class="fas fa-box"></i></div>
+                                <span class="kpi-info-label">Total Orders</span>
+                            </div>
+                            <span class="kpi-badge kpi-badge-up">+12%</span>
+                        </div>
+                        <div class="kpi-value" id="stat-total-orders">0</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box"><i class="fas fa-money-bill-wave"></i></div>
+                                <span class="kpi-info-label">Potential Revenue</span>
+                            </div>
+                            <span class="kpi-badge kpi-badge-up">+5%</span>
+                        </div>
+                        <div>
+                            <span class="kpi-value" id="stat-total-revenue">0</span>
+                            <span class="kpi-value-unit">DA</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box"><i class="fas fa-fire"></i></div>
+                                <span class="kpi-info-label">Success Rate</span>
+                            </div>
+                            <span class="kpi-badge kpi-badge-stable">Stable</span>
+                        </div>
+                        <div class="kpi-value" id="stat-success-rate">0%</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box" style="background: #ecfdf5; color: #10b981;"><i
+                                        class="fas fa-check-square"></i></div>
+                                <span class="kpi-info-label">Confirmed</span>
+                            </div>
+                            <span class="kpi-badge kpi-badge-up">+2</span>
+                        </div>
+                        <div class="kpi-value" id="stat-confirmed-orders">0</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box" style="background: #fef2f2; color: #ef4444;"><i
+                                        class="fas fa-times-circle"></i></div>
+                                <span class="kpi-info-label">Canceled</span>
+                            </div>
+                            <span class="kpi-badge" style="background: #fee2e2; color: #ef4444;">Review</span>
+                        </div>
+                        <div class="kpi-value" id="stat-canceled-orders">0</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="kpi-icon-box" style="background: #eff6ff; color: #3b82f6;"><i
+                                        class="fas fa-eye"></i></div>
+                                <span class="kpi-info-label">Page Views</span>
+                            </div>
+                            <span class="kpi-badge" style="background: #dbeafe; color: #3b82f6;">Live</span>
+                        </div>
+                        <div class="kpi-value" id="stat-page-views">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Phone / Address</th>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="abandoned-tab" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
+                    <h1>Abandoned Carts Recovery</h1>
+                    <div class="live-badge">
+                        <div class="live-dot" style="background: #f87171;"></div>
+                        POTENTIAL RECOVERY
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Potential Customer</th>
+                                    <th>Phone / Wilaya</th>
+                                    <th>Product ID</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="abandoned-table-body">
+                                <!-- Abandoned carts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="products-tab" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
+                    <h1>Product Management</h1>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="position:relative; width: 300px;">
+                            <i class="fas fa-search"
+                                style="position:absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                            <input type="text" id="product-search" class="filter-control"
+                                placeholder="Search products..." style="width:100%; padding-left: 2.5rem;"
+                                oninput="loadProducts()">
+                        </div>
+                        <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add
+                            Product</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pages-tab" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
+                    <h1>Custom Pages CMS</h1>
+                    <button class="btn btn-primary" onclick="openPageModal()"><i class="fas fa-plus"></i> Add
+                        New Page</button>
+                </div>
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title (AR)</th>
+                                    <th>Title (FR)</th>
+                                    <th>Slug</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pages-table-body">
+                                <!-- Pages will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-tab" style="display:none;">
+                <h1>Form Customization</h1>
+
+                <div class="card" style="max-width: 800px;">
+                    <h2
+                        style="margin-bottom: 2rem; color: #64748b; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                        GLOBAL SETTINGS</h2>
+
+                    <form id="settings-form">
+                        <!-- Form Language -->
+                        <div class="form-group">
+                            <label>FORM LANGUAGE</label>
+                            <select id="form-language" class="form-control">
+                                <option value="ar">Arabic (العربية)</option>
+                                <option value="fr">French (Français)</option>
+                            </select>
+                        </div>
+
+                        <!-- Colors -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                            <div class="form-group">
+                                <label>THEME COLOR</label>
+                                <input type="color" id="theme-color" class="form-control" value="#2563eb"
+                                    style="height: 60px; cursor: pointer;">
+                            </div>
+                            <div class="form-group">
+                                <label>HEADER COLOR</label>
+                                <input type="color" id="header-color" class="form-control" value="#f97316"
+                                    style="height: 60px; cursor: pointer;">
+                            </div>
+                        </div>
+
+                        <h2
+                            style="margin: 3rem 0 2rem; color: #64748b; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                            CUSTOM LABELS</h2>
+
+                        <!-- Main CTA Text -->
+                        <div class="form-group">
+                            <label>MAIN CTA TEXT</label>
+                            <input type="text" id="label-mainCta" class="form-control"
+                                placeholder="أطلب الآن - الدفع عند الاستلام">
+                        </div>
+
+                        <!-- Full Name -->
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label>FULL NAME <span
+                                        style="margin-left: 0.5rem; font-size: 0.75rem; color: #94a3b8;">VISIBLE</span></label>
+                                <input type="text" id="label-fullName" class="form-control" placeholder="الإسم الكامل">
+                            </div>
+                            <label class="checkbox-container" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="visible-fullName" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <!-- Phone -->
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label>PHONE <span
+                                        style="margin-left: 0.5rem; font-size: 0.75rem; color: #94a3b8;">VISIBLE</span></label>
+                                <input type="text" id="label-phone" class="form-control" placeholder="رقم الهاتف">
+                            </div>
+                            <label class="checkbox-container" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="visible-phone" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <!-- Wilaya -->
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label>WILAYA <span
+                                        style="margin-left: 0.5rem; font-size: 0.75rem; color: #94a3b8;">VISIBLE</span></label>
+                                <input type="text" id="label-wilaya" class="form-control" placeholder="الولاية">
+                            </div>
+                            <label class="checkbox-container" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="visible-wilaya" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <!-- City -->
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label>CITY <span
+                                        style="margin-left: 0.5rem; font-size: 0.75rem; color: #94a3b8;">VISIBLE</span></label>
+                                <input type="text" id="label-city" class="form-control" placeholder="البلدية / المدينة">
+                            </div>
+                            <label class="checkbox-container" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="visible-city" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <!-- Total Label -->
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 2rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label>TOTAL LABEL <span
+                                        style="margin-left: 0.5rem; font-size: 0.75rem; color: #94a3b8;">VISIBLE</span></label>
+                                <input type="text" id="label-total" class="form-control" placeholder="المجموع النهائي">
+                            </div>
+                            <label class="checkbox-container" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="visible-quantity" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <h2
+                            style="margin: 3rem 0 2rem; color: #64748b; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                            INTEGRATIONS (OPTIONAL)</h2>
+
+                        <!-- WooCommerce -->
+                        <div class="form-group"
+                            style="padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; color: #7c3aed;"><i
+                                    class="fab fa-wordpress"></i> WOOCOMMERCE SYNC</label>
+                            <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+                                <input type="url" id="wc-url" class="form-control"
+                                    placeholder="https://your-wp-site.com">
+                                <input type="text" id="wc-key" class="form-control" placeholder="Consumer Key (ck_...)">
+                                <input type="text" id="wc-secret" class="form-control"
+                                    placeholder="Consumer Secret (cs_...)">
+                            </div>
+                        </div>
+
+                        <!-- Google Sheets -->
+                        <div class="form-group"
+                            style="padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; color: #10b981;"><i
+                                    class="fas fa-table"></i> GOOGLE SHEETS SYNC</label>
+                            <div style="margin-top: 1rem;">
+                                <input type="url" id="gs-url" class="form-control"
+                                    placeholder="Google Apps Script Web App URL">
+                                <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">Orders will be sent
+                                    to this URL as a POST request.</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div id="marketing-tab" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
+                    <h1>Marketing & Tracking</h1>
+                    <button class="btn btn-primary" onclick="saveMarketingSettings()"><i class="fas fa-save"></i> Save
+                        Changes</button>
+                </div>
+
+                <div class="card" style="max-width: 800px;">
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="color: #1877F2; display: flex; align-items: center; gap: 0.5rem;"><i
+                                class="fab fa-facebook"></i> Facebook Pixel ID</label>
+                        <input type="text" id="fb-pixel" class="form-control" placeholder="e.g. 123456789012345">
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">Enter your Pixel ID to track
+                            PageView and Purchase events.</p>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="color: #000000; display: flex; align-items: center; gap: 0.5rem;"><i
+                                class="fab fa-tiktok"></i> TikTok Pixel ID</label>
+                        <input type="text" id="tiktok-pixel" class="form-control" placeholder="e.g. C1234567890">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="color: #4285F4; display: flex; align-items: center; gap: 0.5rem;"><i
+                                class="fab fa-google"></i> Google Analytics (Measurement ID)</label>
+                        <input type="text" id="google-analytics" class="form-control" placeholder="e.g. G-XXXXXXXXXX">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="color: #ea4335; display: flex; align-items: center; gap: 0.5rem;"><i
+                                class="fas fa-search"></i> Google Search Console (Verification Tag)</label>
+                        <input type="text" id="google-search-console" class="form-control"
+                            placeholder="e.g. google-site-verification=...">
+                        <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">Just the value or the whole
+                            meta tag.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title" style="margin-bottom: 1.5rem;">Add New Product</h2>
+            <form id="product-form">
+                <input type="hidden" name="id" id="product-id">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product Title</label>
+                    <input type="text" name="title"
+                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;" required>
+                </div>
+                <div style="margin-bottom: 1rem; display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Price (DZD)</label>
+                        <input type="number" name="price"
+                            style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;"
+                            required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Shipping (DZD)</label>
+                        <input type="number" name="shippingPrice" value="0"
+                            style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;">
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Category</label>
+                    <input type="text" name="category" placeholder="e.g. Health, Tech, Home"
+                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
+                    <textarea name="description" rows="3"
+                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;"></textarea>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product Image</label>
+                    <input type="file" name="image" accept="image/*" style="width:100%;">
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                    <button type="button" class="btn" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Page Modal -->
+    <div id="page-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2 id="page-modal-title" style="margin-bottom: 1.5rem;">Add New Page</h2>
+            <form id="page-form">
+                <input type="hidden" name="id" id="page-id">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Arabic Title</label>
+                        <input type="text" name="titleAr" class="filter-control" style="width:100%;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">French Title</label>
+                        <input type="text" name="titleFr" class="filter-control" style="width:100%;" required>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Slug (leave empty for
+                        auto-gen)</label>
+                    <input type="text" name="slug" class="filter-control" style="width:100%;"
+                        placeholder="e.g. contact-us">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Arabic Content (HTML
+                        support)</label>
+                    <textarea name="contentAr" rows="6" class="filter-control"
+                        style="width:100%; resize: vertical;"></textarea>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">French Content (HTML
+                        support)</label>
+                    <textarea name="contentFr" rows="6" class="filter-control"
+                        style="width:100%; resize: vertical;"></textarea>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                    <button type="button" class="btn" onclick="closePageModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Page</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Edit Modal -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <h2 id="order-modal-title" style="margin-bottom: 1.5rem;">Edit Order</h2>
+            <form id="order-form">
+                <input type="hidden" id="order-id">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Full Name</label>
+                        <input type="text" id="order-fullName" class="filter-control" style="width:100%;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Phone</label>
+                        <input type="text" id="order-phone" class="filter-control" style="width:100%;" required>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;" id="order-product-select-container">
+                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product</label>
+                    <select id="order-productId" class="filter-control" style="width:100%;">
+                        <option value="">Select a product...</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">City</label>
+                        <input type="text" id="order-city" class="filter-control" style="width:100%;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Address</label>
+                        <input type="text" id="order-address" class="filter-control" style="width:100%;" required>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Quantity</label>
+                        <input type="number" id="order-quantity" class="filter-control" style="width:100%;" min="1"
+                            required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Total Price (DZD)</label>
+                        <input type="number" id="order-totalPrice" class="filter-control" style="width:100%;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Status</label>
+                        <select id="order-status" class="filter-control" style="width:100%;">
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="canceled">Canceled</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                    <button type="button" class="btn" onclick="closeOrderModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="order-submit-btn">Update Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
