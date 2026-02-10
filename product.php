@@ -566,7 +566,8 @@ if (isset($_GET['id'])) {
                     } else { throw new Error('Failed'); }
                 } catch (err) {
                     alert(t.orderError);
-                    btn.disabled = fals            btn.innerText = t.submitBtn;
+                    btn.disabled = false;
+                    btn.innerText = t.submitBtn;
                 }
             }
         });
