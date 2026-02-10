@@ -31,7 +31,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^api/settings$ api/settings.php [L,QSA]
 
 # Default document
-DirectoryIndex index.html
+DirectoryIndex index.php
 
 # Security - Prevent directory browsing
 Options -Indexes
