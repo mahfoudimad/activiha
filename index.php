@@ -35,11 +35,11 @@ $db = new Database();
 <body>
     <header>
         <div class="container nav-container">
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
                 <img src="logo.png" alt="Activiha" style="height: 40px;">
             </a>
             <nav class="nav-links">
-                <a href="index.html">Home</a>
+                <a href="index.php">Home</a>
                 <a href="#shop">Shop</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
