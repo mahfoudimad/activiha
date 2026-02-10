@@ -1,3 +1,4 @@
+<?php
 require_once 'api/config.php';
 require_once 'api/tracking_helper.php';
 
@@ -10,21 +11,21 @@ $ogImage = $protocol . $host . '/logo.png';
 $ogUrl = $protocol . $host . $_SERVER['REQUEST_URI'];
 
 if (isset($_GET['id'])) {
-$db = new Database();
-$product = $db->find('products', 'id', $_GET['id']);
+    $db = new Database();
+    $product = $db->find('products', 'id', $_GET['id']);
 
-if ($product) {
-$title = $product['title'] . ' - Activiha';
-$ogTitle = $product['title'];
-$ogDesc = substr(strip_tags($product['description'] ?? 'Order now with Cash on Delivery'), 0, 160);
-// Ensure image has full URL
-if (strpos($product['image'], 'http') === 0) {
-$ogImage = $product['image'];
-}
-else {
-$ogImage = $protocol . $host . '/' . ltrim($product['image'], '/');
-}
-}
+    if ($product) {
+        $title = $product['title'] . ' - Activiha';
+        $ogTitle = $product['title'];
+        $ogDesc = substr(strip_tags($product['description'] ?? 'Order now with Cash on Delivery'), 0, 160);
+        // Ensure image has full URL
+        if (strpos($product['image'], 'http') === 0) {
+            $ogImage = $product['image'];
+        }
+        else {
+            $ogImage = $protocol . $host . '/' . ltrim($product['image'], '/');
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
