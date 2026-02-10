@@ -188,7 +188,7 @@ $ogImage = $protocol . $host . '/' . ltrim($product['image'], '/');
             });
 
             if (!productId) {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
                 return;
             }
 

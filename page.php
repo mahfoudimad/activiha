@@ -103,7 +103,7 @@ $db = new Database();
             });
 
             if (!slug) {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
                 return;
             }
 

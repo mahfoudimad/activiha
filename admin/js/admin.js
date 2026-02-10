@@ -1,7 +1,7 @@
 // Check authentication
 const token = localStorage.getItem('admin_token');
 if (!token) {
-    window.location.href = 'index.html';
+    window.location.href = 'index.php';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -560,7 +560,7 @@ async function deletePage(id) {
 
 function logout() {
     localStorage.removeItem('admin_token');
-    window.location.href = 'index.html';
+    window.location.href = 'index.php';
 }
 
 
