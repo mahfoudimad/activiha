@@ -329,17 +329,16 @@ function openOrderModal(isEdit = true) {
 
     // Populate product dropdown
     const products = JSON.parse(localStorage.getItem('products_cache') || '[]');
-    const select = document.getElementById('order-productId');
-    select.innerHTML = '<option value="">Select a product...</option>' +
-        products.map(p => `<option value="${p.id}">${p.title} (${p.price} DZD)</option>`).join('');
+    products.map(p => `<option value="${p.id}">${p.title} (${p.price} DZD)</option>`).join('');
 
     if (isEdit) {
-        title.innerText = 'Edit Order';
-        submitBtn.innerText = 'Update Order';
-        productSelect.style.display = 'none'; // Don't allow changing product on edit for now
+        title.innerText = 'Order Details';
+        submitBtn.innerText = 'Save Changes';
+        productSelect.style.display = 'none'; // Summary card replaces select on edit
     } else {
         document.getElementById('order-form').reset();
         document.getElementById('order-id').value = '';
+        document.getElementById('order-items-list').innerHTML = '';
         title.innerText = 'Add Manual Order';
         submitBtn.innerText = 'Create Order';
         productSelect.style.display = 'block';
@@ -348,69 +347,74 @@ function openOrderModal(isEdit = true) {
     modal.classList.add('active');
 }
 
-function editOrder(id) {
-    const orders = JSON.parse(localStorage.getItem('orders_cache') || '[]');
-    let order = orders.find(o => o.id === id);
-
-    if (!order) {
-        fetch('/api/orders')
-            .then(res => res.json())
-            .then(orders => {
-                order = orders.find(o => o.id === id);
-                if (order) {
-                    openOrderModal(true);
-                    populateOrderForm(order);
-                } else alert('Order not found');
-            })
-            .catch(err => alert('Failed to load order details'));
-        return;
-    }
-
-    openOrderModal(true);
-    populateOrderForm(order);
-}
-
-function populateOrderForm(order) {
-    document.getElementById('order-id').value = order.id;
-    document.getElementById('order-fullName').value = order.customer.fullName;
-    document.getElementById('order-phone').value = order.customer.phone;
-    document.getElementById('order-city').value = order.customer.city;
-    document.getElementById('order-address').value = order.customer.address;
-    document.getElementById('order-quantity').value = order.quantity;
-    document.getElementById('order-totalPrice').value = order.totalPrice;
-    document.getElementById('order-status').value = order.status;
-}
-
 function closeOrderModal() {
     document.getElementById('order-modal').classList.remove('active');
     document.getElementById('order-form').reset();
 }
 
+async function editOrder(id) {
+    const orders = JSON.parse(localStorage.getItem('orders_cache') || '[]');
+    const order = orders.find(o => o.id == id);
+    if (!order) return;
+
+    openOrderModal(true);
+    document.getElementById('order-id').value = order.id;
+    const form = document.getElementById('order-form');
+    form.querySelector('[name="fullName"]').value = order.customer.fullName;
+    form.querySelector('[name="phone"]').value = order.customer.phone;
+    form.querySelector('[name="city"]').value = order.customer.city;
+    form.querySelector('[name="address"]').value = order.customer.address || '';
+
+    // Create Summary Cards (Reference Design)
+    const summaryContainer = document.getElementById('order-items-list');
+    summaryContainer.innerHTML = `
+        <div class="summary-card">
+            <div>
+                <div class="summary-label">${order.product.title} (Quantity: ${order.quantity})</div>
+                <div style="font-size: 0.75rem; color: #64748b;">Premium Item</div>
+            </div>
+            <div class="summary-value">${order.product.price} DZD</div>
+        </div>
+        <div class="summary-card" style="border-style: dashed; background: #fafafa;">
+            <div class="summary-label">Standard Shipping</div>
+            <div class="summary-value">0 DZD</div>
+        </div>
+        <div class="total-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 600; color: #64748b;">Subtotal</span>
+                <span>${order.totalPrice} DZD</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.1rem; font-weight: 800; color: #0f172a;">Total Amount</span>
+                <span style="font-size: 1.1rem; font-weight: 800; color: #6366f1;">${order.totalPrice} DZD</span>
+            </div>
+        </div>
+    `;
+}
+
 document.getElementById('order-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
     const orderId = document.getElementById('order-id').value;
 
-    const data = {
-        fullName: document.getElementById('order-fullName').value,
-        phone: document.getElementById('order-phone').value,
-        city: document.getElementById('order-city').value,
-        address: document.getElementById('order-address').value,
-        quantity: parseInt(document.getElementById('order-quantity').value),
-        totalPrice: parseFloat(document.getElementById('order-totalPrice').value),
-        status: document.getElementById('order-status').value
+    const payload = {
+        customer: {
+            fullName: data.fullName,
+            phone: data.phone,
+            city: data.city,
+            address: data.address
+        }
     };
 
     if (!orderId) {
-        data.productId = document.getElementById('order-productId').value;
-        if (!data.productId) {
-            alert('Please select a product');
-            return;
-        }
+        payload.productId = data.productId;
+        payload.quantity = 1;
     }
 
     try {
         const url = orderId ? `/api/orders/${orderId}` : '/api/orders';
-        const method = orderId ? 'PUT' : 'POST';
+        const method = orderId ? 'PATCH' : 'POST';
 
         const res = await fetch(url, {
             method,
@@ -418,15 +422,14 @@ document.getElementById('order-form').addEventListener('submit', async (e) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload)
         });
 
         if (res.ok) {
             closeOrderModal();
             loadOrders();
         } else {
-            const errData = await res.json();
-            alert(errData.message || 'Failed to save order');
+            alert('Failed to save order');
         }
     } catch (err) {
         alert('Error saving order');

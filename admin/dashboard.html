@@ -446,43 +446,45 @@
     <!-- Product Modal -->
     <div id="product-modal" class="modal">
         <div class="modal-content">
-            <h2 id="modal-title" style="margin-bottom: 1.5rem;">Add New Product</h2>
+            <div class="close-btn" onclick="closeProductModal()"><i class="fas fa-times"></i></div>
+            <div class="modal-header">
+                <h2 id="modal-title">Product Details</h2>
+                <div class="modal-subtitle">Review and manage product information</div>
+            </div>
             <form id="product-form">
-                <input type="hidden" name="id" id="product-id">
-                <div style="margin-bottom: 1rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product Title</label>
-                    <input type="text" name="title"
-                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;" required>
-                </div>
-                <div style="margin-bottom: 1rem; display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Price (DZD)</label>
-                        <input type="number" name="price"
-                            style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;"
-                            required>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="product-id">
+                    <div class="form-group">
+                        <label>Product Title</label>
+                        <input type="text" name="title" class="form-control" required placeholder="e.g. Luxury Watch">
                     </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Shipping (DZD)</label>
-                        <input type="number" name="shippingPrice" value="0"
-                            style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Price (DZD)</label>
+                            <input type="number" name="price" class="form-control" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Shipping (DZD)</label>
+                            <input type="number" name="shippingPrice" class="form-control" required placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" name="category" class="form-control" required
+                            placeholder="e.g. Health, Tech, Home">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" rows="3"
+                            placeholder="Product details..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Image</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
                     </div>
                 </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Category</label>
-                    <input type="text" name="category" placeholder="e.g. Health, Tech, Home"
-                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;" required>
-                </div>
-                <div style="margin-bottom: 1rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
-                    <textarea name="description" rows="3"
-                        style="width:100%; padding:0.5rem; border:1px solid #d1d5db; border-radius:0.375rem;"></textarea>
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product Image</label>
-                    <input type="file" name="image" accept="image/*" style="width:100%;">
-                </div>
-                <div style="display:flex; justify-content:flex-end; gap:1rem;">
-                    <button type="button" class="btn" onclick="closeProductModal()">Cancel</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Product</button>
                 </div>
             </form>
@@ -492,100 +494,102 @@
     <!-- Page Modal -->
     <div id="page-modal" class="modal">
         <div class="modal-content" style="max-width: 800px;">
-            <h2 id="page-modal-title" style="margin-bottom: 1.5rem;">Add New Page</h2>
+            <div class="close-btn" onclick="closePageModal()"><i class="fas fa-times"></i></div>
+            <div class="modal-header">
+                <h2 id="page-modal-title">Page Content</h2>
+                <div class="modal-subtitle">Manage multi-language content</div>
+            </div>
             <form id="page-form">
-                <input type="hidden" name="id" id="page-id">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom: 1.5rem;">
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Arabic Title</label>
-                        <input type="text" name="titleAr" class="filter-control" style="width:100%;" required>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="page-id">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Arabic Title</label>
+                            <input type="text" name="titleAr" class="form-control" required>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">French Title</label>
+                            <input type="text" name="titleFr" class="form-control" required>
+                        </div>
                     </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">French Title</label>
-                        <input type="text" name="titleFr" class="filter-control" style="width:100%;" required>
+                    <div class="form-group">
+                        <label>Slug (leave empty for auto-gen)</label>
+                        <input type="text" name="slug" class="form-control" placeholder="e.g. contact-us">
+                    </div>
+                    <div class="form-group">
+                        <label>Arabic Content (HTML support)</label>
+                        <textarea name="contentAr" rows="4" class="form-control" style="resize: vertical;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>French Content (HTML support)</label>
+                        <textarea name="contentFr" rows="4" class="form-control" style="resize: vertical;"></textarea>
                     </div>
                 </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Slug (leave empty for
-                        auto-gen)</label>
-                    <input type="text" name="slug" class="filter-control" style="width:100%;"
-                        placeholder="e.g. contact-us">
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">Arabic Content (HTML
-                        support)</label>
-                    <textarea name="contentAr" rows="6" class="filter-control"
-                        style="width:100%; resize: vertical;"></textarea>
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 700;">French Content (HTML
-                        support)</label>
-                    <textarea name="contentFr" rows="6" class="filter-control"
-                        style="width:100%; resize: vertical;"></textarea>
-                </div>
-                <div style="display:flex; justify-content:flex-end; gap:1rem;">
-                    <button type="button" class="btn" onclick="closePageModal()">Cancel</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closePageModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Page</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Order Edit Modal -->
+    <!-- Order Modal -->
     <div id="order-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
-            <h2 id="order-modal-title" style="margin-bottom: 1.5rem;">Edit Order</h2>
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeOrderModal()"><i class="fas fa-times"></i></div>
+            <div class="modal-header">
+                <h2 id="order-modal-title">Order Details</h2>
+                <div class="modal-subtitle">Review customer info and order summary</div>
+            </div>
             <form id="order-form">
-                <input type="hidden" id="order-id">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Full Name</label>
-                        <input type="text" id="order-fullName" class="filter-control" style="width:100%;" required>
+                <div class="modal-body">
+                    <input type="hidden" id="order-id">
+                    <div style="margin-bottom: 2rem;">
+                        <div
+                            style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: #6366f1; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            <i class="fas fa-user-circle"></i> Customer Information
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" name="fullName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" name="phone" class="form-control" required>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>City / Wilaya</label>
+                                <input type="text" name="city" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Detailed Address</label>
+                                <input type="text" name="address" class="form-control">
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Phone</label>
-                        <input type="text" id="order-phone" class="filter-control" style="width:100%;" required>
-                    </div>
-                </div>
-                <div style="margin-bottom: 1rem;" id="order-product-select-container">
-                    <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Product</label>
-                    <select id="order-productId" class="filter-control" style="width:100%;">
-                        <option value="">Select a product...</option>
-                    </select>
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">City</label>
-                        <input type="text" id="order-city" class="filter-control" style="width:100%;" required>
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Address</label>
-                        <input type="text" id="order-address" class="filter-control" style="width:100%;" required>
-                    </div>
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-bottom: 1rem;">
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Quantity</label>
-                        <input type="number" id="order-quantity" class="filter-control" style="width:100%;" min="1"
-                            required>
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Total Price (DZD)</label>
-                        <input type="number" id="order-totalPrice" class="filter-control" style="width:100%;" required>
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom: 0.5rem; font-weight: 500;">Status</label>
-                        <select id="order-status" class="filter-control" style="width:100%;">
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="canceled">Canceled</option>
-                        </select>
+
+                    <div id="order-summary-section">
+                        <div
+                            style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: #6366f1; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            <i class="fas fa-shopping-bag"></i> Order Summary
+                        </div>
+                        <div id="order-product-select-container" class="form-group">
+                            <label>Selected Product</label>
+                            <select id="order-productId" name="productId" class="form-control">
+                                <!-- Products loaded via JS -->
+                            </select>
+                        </div>
+                        <div id="order-items-list">
+                            <!-- Summary items injected via JS -->
+                        </div>
                     </div>
                 </div>
-                <div style="display:flex; justify-content:flex-end; gap:1rem;">
-                    <button type="button" class="btn" onclick="closeOrderModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="order-submit-btn">Update Order</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">Cancel</button>
+                    <button type="submit" id="order-submit-btn" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
