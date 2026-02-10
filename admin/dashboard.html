@@ -20,8 +20,8 @@
                 <a href="#" class="active" id="nav-orders" onclick="showTab('orders')"><i
                         class="fas fa-shopping-bag"></i> Orders</a>
                 <a href="#" id="nav-products" onclick="showTab('products')"><i class="fas fa-box"></i> Products</a>
-                <a href="#" id="nav-abandoned" onclick="showTab('abandoned')"><i class="fas fa-shopping-cart"
-                        style="color: #f87171;"></i> Abandoned</a>
+                <a href="#" id="nav-abandoned" onclick="showTab('abandoned')" style="display:none;"><i
+                        class="fas fa-shopping-cart" style="color: #f87171;"></i> Abandoned</a>
                 <a href="#" id="nav-pages" onclick="showTab('pages')"><i class="fas fa-file-alt"></i> Pages</a>
                 <a href="#" id="nav-marketing" onclick="showTab('marketing')"><i class="fas fa-bullhorn"></i>
                     Marketing</a>
@@ -150,6 +150,7 @@
                                 <option value="confirmed">Confirmed</option>
                                 <option value="delivered">Delivered</option>
                                 <option value="canceled">Canceled</option>
+                                <option value="abandoned">Abandoned</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -187,34 +188,6 @@
                 </div>
             </div>
 
-            <div id="abandoned-tab" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
-                    <h1>Abandoned Carts Recovery</h1>
-                    <div class="live-badge">
-                        <div class="live-dot" style="background: #f87171;"></div>
-                        POTENTIAL RECOVERY
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Potential Customer</th>
-                                    <th>Phone / Wilaya</th>
-                                    <th>Product ID</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="abandoned-table-body">
-                                <!-- Abandoned carts will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
             <div id="products-tab" style="display:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
                     <h1>Product Management</h1>

@@ -7,7 +7,8 @@ if (!token) {
 document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
     loadProducts();
-    loadAbandonedCarts();
+    loadOrders();
+    loadProducts();
     loadPages();
     loadSettings();
     loadStats();
@@ -79,10 +80,11 @@ async function loadOrders() {
             );
         }
 
-        // Update stats based on filtered orders
+        // Update stats based on filtered orders (excluding abandoned from revenue/success unless filtered)
         document.getElementById('stat-total-orders').innerText = filteredOrders.length;
 
-        const totalRev = filteredOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+        const revOrders = filteredOrders.filter(o => o.status !== 'abandoned');
+        const totalRev = revOrders.reduce((sum, o) => sum + o.totalPrice, 0);
         document.getElementById('stat-total-revenue').innerText = totalRev.toLocaleString();
 
         const confirmed = filteredOrders.filter(o => o.status === 'confirmed' || o.status === 'delivered').length;
@@ -91,7 +93,7 @@ async function loadOrders() {
         const canceled = filteredOrders.filter(o => o.status === 'canceled').length;
         document.getElementById('stat-canceled-orders').innerText = canceled;
 
-        const successRate = filteredOrders.length > 0 ? ((confirmed / filteredOrders.length) * 100).toFixed(1) : 0;
+        const successRate = revOrders.length > 0 ? ((confirmed / revOrders.length) * 100).toFixed(1) : 0;
         document.getElementById('stat-success-rate').innerText = `${successRate}%`;
 
 
@@ -117,6 +119,7 @@ async function loadOrders() {
                         <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
                         <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                         <option value="canceled" ${order.status === 'canceled' ? 'selected' : ''}>Canceled</option>
+                        <option value="abandoned" ${order.status === 'abandoned' ? 'selected' : ''}>Abandoned</option>
                     </select>
                     <button class="btn btn-sm" onclick="editOrder('${order.id}')" style="margin-left:0.5rem;" title="Edit"><i class="fas fa-edit"></i></button>
                 </td>
@@ -188,52 +191,7 @@ async function loadStats() {
     }
 }
 
-// Abandoned Carts Management
-async function loadAbandonedCarts() {
-    try {
-        const res = await fetch('/api/abandoned', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const carts = await res.json();
-
-        const tbody = document.getElementById('abandoned-table-body');
-        tbody.innerHTML = carts.map(cart => `
-            <tr>
-                <td style="font-weight:600;">${cart.fullName || '<i>No name</i>'}</td>
-                <td>
-                    <div style="font-size:0.875rem;">${cart.phone}</div>
-                    <div style="font-size:0.75rem; color:#6b7280;">${cart.city || '<i>No city</i>'}</div>
-                </td>
-                <td style="font-family: monospace;">${cart.productId}</td>
-                <td style="font-size:0.75rem;">
-                    ${new Date(cart.updatedAt).toLocaleDateString()}
-                    <div style="color: #64748b;">${new Date(cart.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                </td>
-                <td>
-                    <button class="btn btn-sm" onclick="recoverCart('${cart.phone}')" title="Call/WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                    <button class="btn btn-sm" onclick="deleteAbandoned('${cart.id}')" style="color:#ef4444;" title="Delete"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-    } catch (err) {
-        console.error('Error loading abandoned carts:', err);
-    }
-}
-
-function recoverCart(phone) {
-    window.open(`https://wa.me/${phone.replace(/\s/g, '')}`, '_blank');
-}
-
-async function deleteAbandoned(id) {
-    if (!confirm('Are you sure?')) return;
-    try {
-        await fetch(`/api/abandoned/${id}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        loadAbandonedCarts();
-    } catch (err) { alert('Failed to delete'); }
-}
+// Abandoned Carts Management merged into Orders
 
 // Product Management
 async function loadProducts() {

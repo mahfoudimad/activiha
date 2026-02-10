@@ -25,41 +25,55 @@ switch ($method) {
             sendError('Phone and Product ID required', 400);
         }
 
-        // Check if we already have this phone for this product
-        $carts = $db->get('abandoned_carts');
+        $fullName = $data['fullName'] ?? '';
+        $city = $data['city'] ?? '';
+
+        // Check if we already have an abandoned order for this phone and product
+        $orders = $db->get('orders');
         $foundIndex = -1;
-        foreach ($carts as $index => $cart) {
-            if ($cart['phone'] === $phone && $cart['productId'] === $productId) {
+        foreach ($orders as $index => $order) {
+            if ($order['status'] === 'abandoned' &&
+            $order['customer']['phone'] === $phone &&
+            $order['product']['id'] === $productId) {
                 $foundIndex = $index;
                 break;
             }
         }
 
-        $fullName = $data['fullName'] ?? '';
-        $city = $data['city'] ?? '';
+        // Get product details for title/price
+        $product = $db->find('products', 'id', $productId);
 
         if ($foundIndex >= 0) {
-            // Update existing
-            $carts[$foundIndex]['fullName'] = $fullName;
-            $carts[$foundIndex]['city'] = $city;
-            $carts[$foundIndex]['updatedAt'] = date('c');
-            $db->save('abandoned_carts', $carts);
-            sendResponse(['message' => 'Updated']);
+            // Update existing abandoned order
+            $orders[$foundIndex]['customer']['fullName'] = $fullName;
+            $orders[$foundIndex]['customer']['city'] = $city;
+            $orders[$foundIndex]['updatedAt'] = date('c');
+            $db->set('orders', $orders);
+            sendResponse(['message' => 'Abandoned order updated']);
         }
         else {
-            // Create new
-            $newCart = [
+            // Create new abandoned order
+            $newOrder = [
                 'id' => (string)(time() * 1000),
-                'phone' => $phone,
-                'fullName' => $fullName,
-                'city' => $city,
-                'productId' => $productId,
+                'customer' => [
+                    'fullName' => $fullName,
+                    'phone' => $phone,
+                    'city' => $city,
+                    'address' => ''
+                ],
+                'product' => [
+                    'id' => $productId,
+                    'title' => $product ? $product['title'] : 'Unknown Product',
+                    'price' => $product ? $product['price'] : 0
+                ],
+                'quantity' => 1,
+                'totalPrice' => $product ? $product['price'] : 0,
+                'status' => 'abandoned',
                 'createdAt' => date('c'),
-                'updatedAt' => date('c'),
-                'status' => 'abandoned'
+                'updatedAt' => date('c')
             ];
-            $db->push('abandoned_carts', $newCart);
-            sendResponse($newCart);
+            $db->push('orders', $newOrder);
+            sendResponse($newOrder);
         }
         break;
 

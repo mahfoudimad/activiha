@@ -353,6 +353,12 @@ td {
     color: #991b1b;
 }
 
+.status-abandoned {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px dashed #9ca3af;
+}
+
 .btn {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
@@ -394,6 +400,7 @@ td {
     border-radius: 1rem;
     padding: 2rem;
 }
+
 /* Custom Checkbox */
 .checkbox-container {
     display: block;
@@ -423,11 +430,11 @@ td {
     transition: all 0.2s;
 }
 
-.checkbox-container:hover input ~ .checkmark {
+.checkbox-container:hover input~.checkmark {
     background-color: #e5e7eb;
 }
 
-.checkbox-container input:checked ~ .checkmark {
+.checkbox-container input:checked~.checkmark {
     background-color: #4f46e5;
     border-color: #4f46e5;
 }
@@ -438,7 +445,7 @@ td {
     display: none;
 }
 
-.checkbox-container input:checked ~ .checkmark:after {
+.checkbox-container input:checked~.checkmark:after {
     display: block;
 }
 
