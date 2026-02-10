@@ -7,8 +7,6 @@ if (!token) {
 document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
     loadProducts();
-    loadOrders();
-    loadProducts();
     loadPages();
     loadSettings();
     loadStats();
@@ -26,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function showTab(tab) {
     document.getElementById('orders-tab').style.display = tab === 'orders' ? 'block' : 'none';
     document.getElementById('products-tab').style.display = tab === 'products' ? 'block' : 'none';
-    document.getElementById('abandoned-tab').style.display = tab === 'abandoned' ? 'block' : 'none';
     document.getElementById('pages-tab').style.display = tab === 'pages' ? 'block' : 'none';
     document.getElementById('marketing-tab').style.display = tab === 'marketing' ? 'block' : 'none';
     document.getElementById('settings-tab').style.display = tab === 'settings' ? 'block' : 'none';
