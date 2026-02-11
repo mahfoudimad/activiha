@@ -86,4 +86,32 @@ else {
 }
 
 echo "<hr><p>End of Diagnostics</p>";
+
+// 5. API Logic Test (Simulated)
+echo "<h2>5. API Logic Test</h2>";
+echo "Attempting to load 'demo1' product via internal include...<br>";
+
+// Mock request
+$_SERVER['REQUEST_METHOD'] = 'GET';
+$_SERVER['REQUEST_URI'] = '/api/products.php?id=demo1';
+$_GET['id'] = 'demo1';
+
+ob_start();
+try {
+    include $rootPath . '/api/products.php';
+    $apiOutput = ob_get_clean();
+    echo "<textarea style='width:100%; height:100px;'>" . htmlspecialchars($apiOutput) . "</textarea><br>";
+    
+    $json = json_decode($apiOutput, true);
+    if ($json && (isset($json['id']) || isset($json[0]['id']))) {
+        echo "<span style='color:green'>SUCCESS: Retrieved product data from database.</span><br>";
+    } else {
+        echo "<span style='color:red'>FAILURE: Did not get expected JSON. See output above.</span><br>";
+    }
+} catch (Exception $e) {
+    ob_end_clean();
+    echo "<span style='color:red'>CRITICAL ERROR: " . $e->getMessage() . "</span><br>";
+}
+
+echo "<hr><p>End of Diagnostics</p>";
 ?>
