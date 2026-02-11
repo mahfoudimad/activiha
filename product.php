@@ -91,12 +91,13 @@ if (isset($_GET['id'])) {
         </div>
 
         <!-- Related Products Section -->
-        <div class="related-products-section">
+        <!-- Related Products Section -->
+        <!-- <div class="related-products-section">
             <h2 id="related-title" style="font-size: 2rem; font-weight: 900; margin-bottom: 2rem; color: #1e293b;"></h2>
             <div id="related-products-grid" class="products-grid">
-                <!-- Related items loaded here -->
+               
             </div>
-        </div>
+        </div> -->
     </main>
 
     <footer>
@@ -450,7 +451,7 @@ if (isset($_GET['id'])) {
 
 
                 // Load Related Products
-                loadRelatedProducts(lang);
+                // loadRelatedProducts(lang);
             } catch (err) {
                 document.getElementById('product-detail').innerHTML = `<p style="text-align:center;">${err.message}</p>`;
             }

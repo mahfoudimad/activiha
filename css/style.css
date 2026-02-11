@@ -221,26 +221,44 @@ header {
 
 /* COD Form styling in product page */
 .product-detail-container {
-    display: flex;
-    flex-direction: row;
-    /* Force form to right */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 3rem;
     padding: 3rem 0;
     direction: ltr !important;
-    /* Ensure layout is locked */
+    /* Keep LTR structure */
 }
 
 .product-detail-container>div {
-    flex: 1;
+    min-width: 0;
+    /* Prevent overflow */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .product-detail-container {
         grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.5rem 0;
     }
 
     .hero h1 {
         font-size: 2rem;
+        padding: 0 1rem;
+    }
+
+    .flash-sale-badge {
+        font-size: 0.75rem;
+    }
+
+    /* Make gallery images smaller/manageable on mobile */
+    .product-gallery img {
+        max-height: 400px;
+        object-fit: cover;
+    }
+
+    /* Adjust form padding on mobile */
+    .cod-form .premium-card {
+        border-radius: 1.5rem;
     }
 
     .nav-links {
