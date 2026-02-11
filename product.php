@@ -196,7 +196,7 @@ if (isset($_GET['id'])) {
             }
 
             try {
-                const response = await fetch(`/api/products/${productId}`);
+                const response = await fetch(`/api/products.php?id=${productId}`);
                 const product = await response.json();
 
                 if (!product) throw new Error('Product not found');
@@ -235,13 +235,17 @@ if (isset($_GET['id'])) {
                     
                     <div class="cod-form-container" style="direction: ${t.dir};">
                         <div class="cod-form premium-card" style="border: 2px solid #e2e8f0; box-shadow: var(--shadow-lg); border-radius: 2.5rem; overflow: hidden; background: #fff;">
-                            <!-- Promotional Header -->
-                            <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 1.75rem 3rem; text-align: center; margin: 0;">
+                            <!-- Promotional Header (Desktop) -->
+                            <div class="desktop-form-header" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 1.75rem 3rem; text-align: center; margin: 0;">
                                 <h2 style="color: white; font-weight: 950; font-size: 1.75rem; letter-spacing: -0.5px; margin: 0 0 0.5rem 0;">${lang === 'ar' ? 'تخفيض محدود لفترة قصيرة' : 'Réduction Pour Temps Limité'}</h2>
                                 <p style="color: rgba(255,255,255,0.95); font-size: 1rem; font-weight: 700; margin: 0;">${lang === 'ar' ? 'الدفع عند الاستلام • ضمان الجودة' : 'Paiement à la livraison • Garantie Qualité'}</p>
                             </div>
                             
-                            <div style="padding: 3rem;">
+                            <div class="form-content-wrapper" style="padding: 3rem;">
+                                <!-- Mobile Header -->
+                                <h3 class="mobile-form-title" style="display: none;">
+                                    ${lang === 'ar' ? 'ادخل معلوماتك واستفد من التخفيض' : 'Entrez vos informations pour profiter de la réduction'}
+                                </h3>
                             <form id="order-form">
                                 <input type="hidden" name="productId" value="${product.id}">
                                 
@@ -430,7 +434,7 @@ if (isset($_GET['id'])) {
                         const phone = phoneInput.value;
                         if (phone.length >= 8) { // Capture only if it looks like a real number
                             try {
-                                await fetch('/api/abandoned', {
+                                await fetch('/api/abandoned.php', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
@@ -459,7 +463,7 @@ if (isset($_GET['id'])) {
 
         async function loadRelatedProducts(lang) {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch('/api/products.php');
                 const products = await response.json();
                 const t = translations[lang];
 
@@ -556,7 +560,7 @@ if (isset($_GET['id'])) {
                 btn.innerText = t.submitting;
 
                 try {
-                    const res = await fetch('/api/orders', {
+                    const res = await fetch('/api/orders.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
@@ -571,7 +575,7 @@ if (isset($_GET['id'])) {
                     btn.innerText = t.submitBtn;
                 }
             }
-        });
+     );
     </script>
 </body>
 

@@ -1,83 +1,83 @@
 {
-  "products": [
-    {
-      "id": "demo1",
-      "title": "Luxury Chronograph Watch",
-      "price": 12500,
-      "shippingPrice": 500,
-      "category": "Accessories",
-      "description": "Premium chronograph watch with stainless steel band. Water resistant and elegant design.",
-      "image": "/uploads/demo_product_watch.png",
-      "createdAt": "2024-02-09T18:00:00.000Z"
+    "products": [
+        {
+            "id": "demo1",
+            "title": "Luxury Chronograph Watch",
+            "price": 12500,
+            "shippingPrice": 500,
+            "category": "Accessories",
+            "description": "Premium chronograph watch with stainless steel band. Water resistant and elegant design.",
+            "image": "\/uploads\/demo_product_watch.png",
+            "createdAt": "2024-02-09T18:00:00.000Z"
+        },
+        {
+            "id": "demo2",
+            "title": "Organic Artisan Coffee",
+            "price": 3200,
+            "shippingPrice": 400,
+            "category": "Food & Drinks",
+            "description": "100% Arabica organic coffee beans. Roasted to perfection for a rich aroma.",
+            "image": "\/uploads\/demo_product_coffee.png",
+            "createdAt": "2024-02-09T18:05:00.000Z"
+        }
+    ],
+    "orders": [
+        {
+            "id": "1770667072278",
+            "customer": {
+                "fullName": "Test User",
+                "phone": "0555123456",
+                "city": "Algiers"
+            },
+            "product": {
+                "id": "demo1",
+                "title": "Luxury Chronograph Watch",
+                "price": 12500
+            },
+            "quantity": 1,
+            "totalPrice": 12500,
+            "status": "pending",
+            "createdAt": "2026-02-09T19:57:52.280Z"
+        },
+        {
+            "id": "1770667150168",
+            "customer": {
+                "fullName": "Utilisateur Test",
+                "phone": "0777123456",
+                "city": "Oran"
+            },
+            "product": {
+                "id": "demo1",
+                "title": "Luxury Chronograph Watch",
+                "price": 12500
+            },
+            "quantity": 1,
+            "totalPrice": 12500,
+            "status": "pending",
+            "createdAt": "2026-02-09T19:59:10.168Z"
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "username": "admin",
+            "password": "$2a$10$X87o.T1zI6Y4H\/L5mIe0.uvv51Jb.7tI8rI7Y6y0X6U3R7I8rI7Y6"
+        }
+    ],
+    "settings": {
+        "storeName": "RichDigit COD Store",
+        "contactWhatsapp": "+213000000000",
+        "currency": "DZD"
     },
-    {
-      "id": "demo2",
-      "title": "Organic Artisan Coffee",
-      "price": 3200,
-      "shippingPrice": 400,
-      "category": "Food & Drinks",
-      "description": "100% Arabica organic coffee beans. Roasted to perfection for a rich aroma.",
-      "image": "/uploads/demo_product_coffee.png",
-      "createdAt": "2024-02-09T18:05:00.000Z"
-    }
-  ],
-  "orders": [
-    {
-      "id": "1770667072278",
-      "customer": {
-        "fullName": "Test User",
-        "phone": "0555123456",
-        "city": "Algiers"
-      },
-      "product": {
-        "id": "demo1",
-        "title": "Luxury Chronograph Watch",
-        "price": 12500
-      },
-      "quantity": 1,
-      "totalPrice": 12500,
-      "status": "pending",
-      "createdAt": "2026-02-09T19:57:52.280Z"
-    },
-    {
-      "id": "1770667150168",
-      "customer": {
-        "fullName": "Utilisateur Test",
-        "phone": "0777123456",
-        "city": "Oran"
-      },
-      "product": {
-        "id": "demo1",
-        "title": "Luxury Chronograph Watch",
-        "price": 12500
-      },
-      "quantity": 1,
-      "totalPrice": 12500,
-      "status": "pending",
-      "createdAt": "2026-02-09T19:59:10.168Z"
-    }
-  ],
-  "users": [
-    {
-      "id": 1,
-      "username": "admin",
-      "password": "$2a$10$X87o.T1zI6Y4H/L5mIe0.uvv51Jb.7tI8rI7Y6y0X6U3R7I8rI7Y6"
-    }
-  ],
-  "settings": {
-    "storeName": "RichDigit COD Store",
-    "contactWhatsapp": "+213000000000",
-    "currency": "DZD"
-  },
-  "pages": [
-    {
-      "id": "6025d280-d931-45c0-be39-befec6c2f2a8",
-      "titleAr": "من نحن",
-      "titleFr": "À propos de nous",
-      "contentAr": "نحن متجر Activiha الرائد في الجزائر",
-      "contentFr": "Nous sommes Activiha, le leader en Algérie.",
-      "slug": "about-us",
-      "createdAt": "2026-02-09T20:18:53.105Z"
-    }
-  ]
+    "pages": [
+        {
+            "id": "6025d280-d931-45c0-be39-befec6c2f2a8",
+            "titleAr": "من نحن",
+            "titleFr": "À propos de nous",
+            "contentAr": "نحن متجر Activiha الرائد في الجزائر",
+            "contentFr": "Nous sommes Activiha, le leader en Algérie.",
+            "slug": "about-us",
+            "createdAt": "2026-02-09T20:18:53.105Z"
+        }
+    ]
 }

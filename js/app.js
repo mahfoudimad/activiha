@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadProducts() {
     const grid = document.getElementById('product-grid');
     try {
-        const response = await fetch('/api/products');
+        const response = await fetch('/api/products.php');
         const products = await response.json();
 
         if (products.length === 0) {
