@@ -42,7 +42,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^page/([^/]+)$ page.php?id=$1 [L,QSA]
 
 # Default document
-DirectoryIndex index.php
+DirectoryIndex index.php index.html
 
 # Security - Prevent directory browsing
 <IfModule mod_autoindex.c>
