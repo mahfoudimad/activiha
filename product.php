@@ -197,7 +197,19 @@ if (isset($_GET['id'])) {
 
             try {
                 const response = await fetch(`/api/products.php?id=${productId}`);
-                const product = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                let product;
+                try {
+                    product = JSON.parse(text);
+                } catch (e) {
+                    console.error('API Response:', text);
+                    throw new Error('Invalid Data received from server. See console for details.');
+                }
 
                 if (!product) throw new Error('Product not found');
 
@@ -562,7 +574,7 @@ if (isset($_GET['id'])) {
                 try {
                     const res = await fetch('/api/orders.php', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 'Content-Type': 'applion},
                         body: JSON.stringify(data)
                     });
 
