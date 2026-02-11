@@ -681,7 +681,7 @@ if (isset($_GET['id'])) {
                     btn.innerText = t.submitBtn;
                 }
             }
-     );
+        });
     </script>
 </body>
 
