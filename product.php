@@ -560,7 +560,7 @@ if (isset($_GET['id'])) {
                     <div class="text-center p-8 bg-red-50 rounded-xl border border-red-200">
                         <p class="text-red-600 font-bold mb-2">Une erreur est survenue</p>
                         <p class="text-gray-600 text-sm mb-4">${err.message}</p>
-                        <button onclick="location.reload()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        <button onclick="location.reload()" class="px-4 py-2 bg-red-600 text-white rounded-lg hove-reransition-colors">
                             Réessayer
                         </button>
                     </div>`;
@@ -668,7 +668,8 @@ if (isset($_GET['id'])) {
                 try {
                     const res = await fetch('/api/orders.php', {
                         method: 'POST',
-                        headers: { 'Content-Typeapp                        body: JSON.stringify(data)
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
                     });
 
                     if (res.ok) {
