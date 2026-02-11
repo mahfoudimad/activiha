@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteBase /
 
 # Enable CORS
 Header set Access-Control-Allow-Origin "*"
@@ -44,10 +45,17 @@ RewriteRule ^page/([^/]+)$ page.php?id=$1 [L,QSA]
 DirectoryIndex index.php
 
 # Security - Prevent directory browsing
-Options -Indexes
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
 
 # Protect sensitive files
 <FilesMatch "^\.">
-    Order allow,deny
-    Deny from all
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
