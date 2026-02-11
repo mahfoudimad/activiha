@@ -3,6 +3,7 @@
     RewriteBase /
 
     # API Routes
+    # API Routes - Allow direct access to .php files
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^api/products/([^/]+)$ api/products.php?id=$1 [L,QSA]
@@ -26,22 +27,6 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^api/pages$ api/pages.php [L,QSA]
-
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^api/auth/login$ api/auth.php [L,QSA]
-    
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^api/auth$ api/auth.php [L,QSA]
-
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^api/settings$ api/settings.php [L,QSA]
-    
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^api/stats$ api/stats.php [L,QSA]
 
     # Frontend Routes
     RewriteCond %{REQUEST_FILENAME} !-f
